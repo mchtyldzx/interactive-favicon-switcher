@@ -1,4 +1,4 @@
-# Mood Favicon
+# Interactive Favicon Switcher
 
 ## Description
 Mood Favicon is a simple web application that changes the favicon of the webpage based on the user's mood. The mood is represented by a numerical value that can be increased or decreased through user interactions. The application also provides visual feedback through animations and updates the displayed mood and level.
