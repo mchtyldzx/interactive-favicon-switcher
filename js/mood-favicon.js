@@ -7,40 +7,68 @@ class MoodFavicon {
             document.head.appendChild(this.favicon);
         }
 
-        this.happiness = 50;
-        this.level = 1;
-        this.clickPower = 5;
-
+        this.mood = 20; 
+        this.level = 1; 
+        
         this.states = {
-            sad: '/assets/favicon-sad.png',
-            normal: '/assets/favicon-normal.png',
-            happy: '/assets/favicon-happy.png',
-            super: '/assets/favicon-super.png',
-            scrolling: '/assets/favicon-scrolling.png',
-            night: '/assets/favicon-night.png'
+            crying: 'assets/favicon-crying.png',      
+            sad: 'assets/favicon-sad.png',      
+            normal: 'assets/favicon-normal.png', 
+            happy: 'assets/favicon-happy.png',   
+            super: 'assets/favicon-super.png',   
+            scrolling: 'assets/favicon-scrolling.png', 
+            night: 'assets/favicon-night.png'    
         };
+
+        this.powers = {};
+
+        this.clickPower = 5; 
 
         this.startGameLoop();
         this.initializeEventListeners();
         this.updateStats();
     }
 
+    createPowerButtons() {
+        const powerContainer = document.createElement('div');
+        powerContainer.id = 'power-container';
+        powerContainer.style.cssText = `
+            position: fixed;
+            top: 200px;  
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        `;
+
+        const resetLevelBtn = document.createElement('button');
+        resetLevelBtn.innerHTML = '🔄 Reset Level';
+        resetLevelBtn.className = 'power-button';
+        resetLevelBtn.onclick = () => this.resetLevel();
+        powerContainer.appendChild(resetLevelBtn);
+
+        document.body.appendChild(powerContainer);
+    }
+
+    togglePower(powerType, button) {
+    }
+
     startGameLoop() {
         setInterval(() => {
-            if (!this.isNightTime()) {
-                this.happiness = Math.max(0, this.happiness - 10);
-                this.updateState();
-                this.updateStats();
-            }
+            this.mood = Math.max(0, this.mood - 3); 
+            this.updateState();
+            this.updateStats();
         }, 1000);
     }
 
     updateState() {
-        if (this.happiness <= 30) {
+        if (this.mood <= 15) {
+            this.setState('crying');
+        } else if (this.mood <= 30) {
             this.setState('sad');
-        } else if (this.happiness <= 60) {
+        } else if (this.mood <= 60) {
             this.setState('normal');
-        } else if (this.happiness <= 90) {
+        } else if (this.mood <= 90) {
             this.setState('happy');
         } else {
             this.setState('super');
@@ -50,58 +78,46 @@ class MoodFavicon {
     setState(state) {
         this.currentState = state;
         this.favicon.href = this.states[state];
+
+        const body = document.body;
+        if (body.classList.contains('dark-mode')) {
+            this.favicon.href = this.states['night'];
+        }
     }
 
     updateStats() {
-        this.level = Math.floor(this.happiness / 20) + 1;
-        this.clickPower = 5 + Math.floor(this.level / 2);
+        this.level = Math.floor(this.mood / 20) + 1;
 
         const stats = document.getElementById('mood-stats');
         if (stats) {
             stats.innerHTML = `
-                Mutluluk: ${this.happiness}/100<br>
-                Seviye: ${this.level}<br>
-                Tıklama Gücü: ${this.clickPower}
+                Mood: ${this.mood}/100<br>
+                Level: ${this.level}
             `;
         }
     }
 
-    isNightTime() {
-        const hour = new Date().getHours();
-        return hour >= 20 || hour <= 6;
-    }
-
     initializeEventListeners() {
         document.addEventListener('click', () => {
-            if (!this.isNightTime()) {
-                this.happiness = Math.min(100, this.happiness + this.clickPower);
-                this.updateState();
-                this.updateStats();
-                this.showClickEffect();
-            }
+            let clickPower = this.clickPower; 
+
+            this.mood = Math.min(100, this.mood + clickPower); 
+            this.updateState();
+            this.updateStats();
+            this.showClickEffect(clickPower); 
         });
 
         let scrollTimeout;
         window.addEventListener('scroll', () => {
-            if (!this.isNightTime()) {
-                clearTimeout(scrollTimeout);
-                this.setState('scrolling');
-                scrollTimeout = setTimeout(() => this.updateState(), 1000);
-            }
+            clearTimeout(scrollTimeout);
+            this.setState('scrolling');
+            scrollTimeout = setTimeout(() => this.updateState(), 1000);
         });
-
-        setInterval(() => {
-            if (this.isNightTime()) {
-                this.setState('night');
-            } else {
-                this.updateState();
-            }
-        }, 60000);
     }
 
-    showClickEffect() {
+    showClickEffect(clickPower) {
         const effect = document.createElement('div');
-        effect.innerHTML = `+${this.clickPower}`;
+        effect.innerHTML = `+${clickPower}`;
         effect.style.cssText = `
             position: fixed;
             color: #4CAF50;
@@ -116,6 +132,12 @@ class MoodFavicon {
         
         setTimeout(() => effect.remove(), 1000);
     }
+
+    resetLevel() {
+        this.mood = 0; 
+        this.updateState();
+        this.updateStats();
+    }
 }
 
 const style = document.createElement('style');
@@ -128,7 +150,7 @@ style.textContent = `
         position: fixed;
         top: 10px;
         right: 10px;
-        background: rgba(0,0,0,0.7);
+        background: #414141;
         color: white;
         padding: 10px;
         border-radius: 5px;

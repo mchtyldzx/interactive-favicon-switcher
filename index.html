@@ -1,26 +1,95 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Favicon</title>
+    <title>Interactive Favicon Test</title>
     
-    <link rel="icon" type="image/png" href="/assets/favicon-normal.png">
-    <script src="/js/mood-favicon.js"></script>
+    <link rel="icon" type="image/png" href="assets/favicon-normal.png">
+    <script src="js/mood-favicon.js"></script>
     
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const link = document.querySelector("link[rel='icon']");
+            
+            if (window.moodFavicon) {
+                window.moodFavicon.setState(window.moodFavicon.currentState);
+            }
+        }
+
+        function resetLevel() {
+            if (window.moodFavicon) {
+                window.moodFavicon.resetLevel();
+            }
+        }
+
+        const translations = {
+            en: {
+                title: "Interactive Favicon Test",
+                instructions: "To test:",
+                click: "Click on the page (mood increases)",
+                scroll: "Scroll up/down (scrolling state)",
+                wait: "Wait (mood decreases over time)",
+                stats: "Check the statistics in the top right corner",
+                darkMode: "If dark mode is enabled, the favicon state will not change according to the mood.",
+                reset: "🔄 Reset Level",
+                toggleDark: "🌓 Toggle Dark Mode",
+                greeting: "End of the page"
+            },
+            tr: {
+                title: "Etkileşimli Favicon Testi",
+                instructions: "Test etmek için:",
+                click: "Sayfaya tıklayın (mod artar)",
+                scroll: "Yukarı/aşağı kaydırın (kaydırma durumu)",
+                wait: "Bekleyin (mod zamanla azalır)",
+                stats: "Sağ üst köşedeki istatistikleri kontrol edin",
+                darkMode: "Karanlık mod etkinse, favicon durumu moda göre değişmeyecektir.",
+                reset: "🔄 Seviyeyi Sıfırla",
+                toggleDark: "🌓 Karanlık Modu Değiştir",
+                greeting: "Sayfa Sonu"
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function toggleLanguageOptions() {
+            const options = document.querySelector('.language-options');
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            updateContent();
+            toggleLanguageOptions();
+        }
+
+        function updateContent() {
+            document.getElementById('greeting').innerText = translations[currentLanguage].greeting;
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                el.textContent = translations[currentLanguage][key];
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', updateContent);
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 2000px; /* Scroll testi için */
-            background: #f0f0f0;
+            min-height: 2000px;
+            background: #21b1b6;
+            color: black;
         }
         
         .test-area {
             margin-top: 100px;
             padding: 20px;
-            background: white;
+            background: #35e6ec;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -30,29 +99,131 @@
             margin: 10px;
             border: none;
             border-radius: 5px;
-            background: #4CAF50;
+            background: #414141;
             color: white;
             cursor: pointer;
         }
 
         .test-button:hover {
-            background: #45a049;
+            background: #5e5e5e;
+        }
+
+        .dark-mode .test-area{
+            background: black;
+            color: white;
+        }
+        .dark-mode {
+            background: black;
+            color: white;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .button-container {
+            position: fixed;
+            top: 80px;
+            right: 0px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .language-select {
+            position: fixed;
+            top: 210px;
+            right: 10px;
+            display: inline-block;
+            width: 150px;
+        }
+
+        .language-select select {
+            display: none;
+        }
+
+        .selected-language {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #414141;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-language img {
+            margin-right: 10px;
+            width: 20px;
+            height: 15px;
+        }
+
+        .language-options {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            border: 1px solid #ccc;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .language-options div {
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .language-options div:hover {
+            background-color: #555;
+        }
+
+        .language-options img {
+            margin-right: 10px;
+            width: 20px;
+            height: 15px;
         }
     </style>
 </head>
 <body>
     <div class="test-area">
-        <h1>Favicon Oyun Testi</h1>
-        <p>Test etmek için:</p>
+        <h1 data-key="title">Interactive Favicon Test</h1>
+        <p data-key="instructions">To test:</p>
         <ul>
-            <li>Sayfaya tıklayın (mutluluk artar)</li>
-            <li>Sayfayı aşağı/yukarı kaydırın (uykulu ifade)</li>
-            <li>Bekleyin (mutluluk zamanla azalır)</li>
-            <li>Sağ üst köşedeki istatistikleri kontrol edin</li>
+            <li data-key="click">Click on the page (mood increases)</li>
+            <li data-key="scroll">Scroll up/down (scrolling state)</li>
+            <li data-key="wait">Wait (mood decreases over time)</li>
+            <li data-key="stats">Check the statistics in the top right corner</li>
         </ul>
+        <p data-key="darkMode">If dark mode is enabled, the favicon state will not change according to the mood.</p>
+    </div>
+
+    <div class="button-container">
+        <button class="test-button" onclick="resetLevel()" data-key="reset">🔄 Reset Level</button>
+        <button class="test-button" onclick="toggleDarkMode()" data-key="toggleDark">🌓 Toggle Dark Mode</button>
+        <div class="language-select">
+            <div class="selected-language" onclick="toggleLanguageOptions()">
+                <img src="assets/uk-flag.png" alt="UK Flag">
+                &nbsp; / &nbsp; &nbsp;
+                <img src="assets/auuuu.png" alt="TR Flag">
+            </div>
+            <div class="language-options">
+                <div onclick="changeLanguage('en')">
+                    <img src="assets/uk-flag.png" alt="UK Flag"> English
+                </div>
+                <div onclick="changeLanguage('tr')">
+                    <img src="assets/auuuu.png" alt="TR Flag"> Türkçe
+                </div>
+            </div>
+        </div>
     </div>
 
     <div style="height: 1500px;">
     </div>
+
+    <div id="greeting"></div>
 </body>
 </html> 
