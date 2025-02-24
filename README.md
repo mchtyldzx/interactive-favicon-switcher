@@ -1,36 +1,22 @@
-# Interactive Favicon Switcher
+# Mood Favicon
 
-**Interactive Favicon Switcher** is a web project that dynamically changes the favicon based on user interactions such as clicking and scrolling, as well as the time of day. The favicon changes to reflect different "mood" states, providing an engaging and interactive experience for users.
+## Description
+Mood Favicon is a simple web application that changes the favicon of the webpage based on the user's mood. The mood is represented by a numerical value that can be increased or decreased through user interactions. The application also provides visual feedback through animations and updates the displayed mood and level.
 
 ## Features
+- Dynamic favicon changes based on mood levels.
+- User can increase mood by clicking on the page.
+- Mood decreases over time, simulating a natural decline.
+- Visual effects to indicate mood changes.
+- Responsive design for easy integration into any webpage.
 
-- **Mood-based Favicon**: The favicon changes based on the user's happiness level, which increases by clicking on the page.
-- **Time-based Favicon**: During night hours (8 PM to 6 AM), the favicon switches to a night-themed icon.
-- **Click Power**: Each click on the page increases your happiness level, and the click power grows as your happiness level rises.
-- **Scrolling Favicon**: While scrolling, the favicon changes to a "scrolling" state for a brief moment.
-- **Stats Panel**: Displays the current happiness level, the user's level, and the current click power.
+## Usage
+- Click anywhere on the page to increase your mood.
+- The favicon will change according to the current mood level.
+- The mood will decrease automatically over time.
 
-## How It Works
+## Contributing
+Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
 
-- The favicon will change depending on the happiness level (sad, normal, happy, or super).
-- Every click on the page increases the happiness, which in turn improves the favicon state.
-- At night, the favicon switches to a "night" state.
-- Scrolling will temporarily change the favicon to a "scrolling" state.
-- Stats related to the user's happiness level and click power are shown at the top-right corner.
-
-## Installation
-
-1. Download or clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/Interactive-Favicon-Switcher.git
-Open the index.html file in a web browser to view the project in action.
-Usage
-Click anywhere on the page to increase the happiness level.
-Scroll the page to see the scrolling favicon effect.
-View the current stats and how your happiness level is progressing in the top-right corner.
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Acknowledgments
-Inspired by interactive web designs and the idea of providing a fun user experience through favicon customization.
+## Acknowledgments
+- Inspired by the need for interactive web applications that enhance user experience.
